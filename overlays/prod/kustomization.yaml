@@ -1,0 +1,16 @@
+resources:
+  - ../../base
+namePrefix: prod-
+patchesStrategicMerge:
+  - |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: web-app
+    spec:
+      replicas: 3
+      template:
+        spec:
+          containers:
+          - name: web-app
+            image: nginx:1.25.4
