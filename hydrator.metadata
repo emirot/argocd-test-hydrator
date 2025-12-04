@@ -1,0 +1,7 @@
+{
+  "repoURL": "https://github.com/emirot/argocd-test-hydrator",
+  "drySha": "be3def5bc507636a20a8eb773a58468b4fb9c160",
+  "author": "Nolan Emirot <emirot.nolan@gmail.com>",
+  "date": "2025-12-03T22:40:51Z",
+  "subject": "Update namespace.yaml"
+}
