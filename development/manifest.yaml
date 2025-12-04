@@ -1,27 +1,71 @@
 apiVersion: v1
-kind: Namespace
+kind: ServiceAccount
 metadata:
   labels:
-    nolan: test
-  name: test
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: hello-world
+    app.kubernetes.io/version: 1.16.0
+    helm.sh/chart: hello-world-0.1.0
+  name: my-release-hello-world
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: hello-world
+    app.kubernetes.io/version: 1.16.0
+    helm.sh/chart: hello-world-0.1.0
+  name: my-release-hello-world
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/name: hello-world
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dev-web-app
-  namespace: test
+  labels:
+    app.kubernetes.io/instance: my-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: hello-world
+    app.kubernetes.io/version: 1.16.0
+    helm.sh/chart: hello-world-0.1.0
+  name: my-release-hello-world
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-app
+      app.kubernetes.io/instance: my-release
+      app.kubernetes.io/name: hello-world
   template:
     metadata:
       labels:
-        app: web-app
+        app.kubernetes.io/instance: my-release
+        app.kubernetes.io/name: hello-world
     spec:
       containers:
-        - image: nginx:1.25.4
-          name: web-app
+        - image: nginx:1.16.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          name: hello-world
           ports:
             - containerPort: 80
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+      serviceAccountName: my-release-hello-world

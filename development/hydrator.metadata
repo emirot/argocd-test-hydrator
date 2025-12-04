@@ -1,7 +1,7 @@
 {
   "repoURL": "https://github.com/emirot/argocd-test-hydrator",
-  "drySha": "be3def5bc507636a20a8eb773a58468b4fb9c160",
+  "drySha": "0d288ebfe955eb8b9c7a2b049f47fac77e4951e0",
   "commands": [
-    "kustomize build ./overlays/dev"
+    "helm template . --name-template my-release --values ./hello-world/values.yaml --include-crds"
   ]
 }
